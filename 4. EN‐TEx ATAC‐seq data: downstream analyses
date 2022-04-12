@@ -1,3 +1,8 @@
 #### 4. EN‐TEx ATAC‐seq data: downstream analyses
 
-###
+#### Move to folder ATAC-seq, and create folders to store bigBed data files and peaks analyses files. 
+#### Make sure the files are organized in a consistent way as done for ChIP-seq.
+
+###Run the docker container
+
+sudo docker run -v $PWD:$PWD -w $PWD --rm -it dgarrimar/epigenomics_course
