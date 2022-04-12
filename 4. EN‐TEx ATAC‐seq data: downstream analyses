@@ -3,6 +3,47 @@
 #### Move to folder ATAC-seq, and create folders to store bigBed data files and peaks analyses files. 
 #### Make sure the files are organized in a consistent way as done for ChIP-seq.
 
-###Run the docker container
+### Run the docker container
 
 sudo docker run -v $PWD:$PWD -w $PWD --rm -it dgarrimar/epigenomics_course
+
+### Move to the ATAC-seq folder and create the folders for downstream analyses
+
+cd epigenomics_uvic/ATAC-seq/
+mkdir data
+mkdir analyses
+mkdir annotation
+
+
+### Retrieve from a newly generated metadata file ATAC-seq peaks (bigBed narrow, pseudoreplicated peaks, assembly GRCh38) for stomach and sigmoid_colon for the same donor used in the previous sections. 
+Hint: have a look at what we did here. Make sure your md5sum values coincide with the ones provided by ENCODE.
+
+
+### Download the metadata for the ATAC-seq experiment for stomach and sigmoid colon cancer
+
+../bin/download.metadata.sh "https://www.encodeproject.org/metadata/?replicates.library.biosample.donor.uuid=d370683e-81e7-473f-8475-7716d027849b&status=released&status=submitted&status=in+progress&assay_title=ATAC-seq&biosample_ontology.term_name=stomach&biosample_ontology.term_name=sigmoid+colon&type=Experiment"
+
+### Create folders for bigBed and bigWig files
+
+mkdir data/bigBed.files data/bigWig.files
+
+### Download bigBed peak calling files
+
+grep -F ATAC-seq metadata.tsv |\
+grep -F "bigBed_narrowPeak" |\
+grep -F "pseudoreplicated_peaks" |\
+grep -F "GRCh38" |\
+awk 'BEGIN{FS=OFS="\t"}{print $1, $11, $23}' |\
+sort -k2,2 -k1,1r |\
+sort -k2,2 -u > analyses/bigBed.peaks.ids.txt
+
+cut -f1 analyses/bigBed.peaks.ids.txt |\
+while read filename; do
+  wget -P data/bigBed.files "https://www.encodeproject.org/files/$filename/@@download/$filename.bigBed"
+done
+
+
+
+
+
+
