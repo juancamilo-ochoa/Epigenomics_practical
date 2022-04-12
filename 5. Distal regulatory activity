@@ -74,8 +74,25 @@ wc -l analyses/peaks.analysis/peaks.H3K27ac.H3K4me1.stomach.txt
 
 ### A total of 53615 peaks were found in sigmoid colon and 40992 in stomach.
 
+### Task 3: Focus on regulatory elements that are located on chromosome 1 , and generate a file regulatory.elements.starts.tsv that contains the name of the regulatory region (i.e. the name of the original ATAC-seq peak) and the start (5') coordinate of the region.
 
+grep -w "chr1" analyses/peaks.analysis/peaks.H3K27ac.H3K4me1.sigmoid_colon.txt | awk 'BEGIN{FS=OFS="\t"}{if ($6=="+"){start=$2} else {start=$3}; print $4, start}' > analyses/regulatory.elements.starts.sigmoid_colon.tsv
 
+grep -w "chr1" analyses/peaks.analysis/peaks.H3K27ac.H3K4me1.stomach.txt | awk 'BEGIN{FS=OFS="\t"}{if ($6=="+"){start=$2} else {start=$3}; print $4, start}' > analyses/regulatory.elements.starts.stomach.tsv
+
+### Task 4: Focus on protein-coding genes located on chromosome 1. 
+### From the BED file of gene body coordinates that you generated here, 
+### prepare a tab-separated file called gene.starts.tsv which will store the name of the gene in the first column, 
+### and the start coordinate of the gene on the second column (REMEMBER: for genes located on the minus strand, the start coordinate will be at the 3'). Use the command below as a starting point:
+
+### For this I copied the file with the gene body coordinates in the annotation folder inside regulatory_elements folder
+
+grep -w "chr1" annotation/gencode.v24.protein.coding.gene.body.bed | awk 'BEGIN{FS=OFS="\t"}{if ($6=="+"){start=$2} else {start=$3}; print $4, start}' > analyses/gene.starts.tsv
+
+Task 5: Download or copy this python script inside the epigenomics_uvic/bin folder. 
+Have a look at the help page of this script to understand how it works:
+
+python bin/get.distance.py -h
 
 
 
