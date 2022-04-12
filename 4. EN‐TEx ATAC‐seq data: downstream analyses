@@ -42,6 +42,49 @@ while read filename; do
   wget -P data/bigBed.files "https://www.encodeproject.org/files/$filename/@@download/$filename.bigBed"
 done
 
+# Convert bigBed files of ATAC-seq peaks to BED files with the bigBedToBed command:
+
+mkdir data/bed.files
+
+cut -f1 analyses/bigBed.peaks.ids.txt |\
+while read filename; do
+  bigBedToBed data/bigBed.files/"$filename".bigBed data/bed.files/"$filename".bed
+done
+
+### Create the peaks analysis folder
+
+mkdir analyses/peaks.analysis
+
+### The file with list of promoters ([-2 kb, +2 Kb] from TSS) of protein-coding genes provided in class was stored into the annotation folder.
+
+### Running the intersection analyses to find the peaks in the promoter regions ([-2 kb, +2 Kb] from TSS)
+
+cut -f-2 analyses/bigBed.peaks.ids.txt |\
+while read filename tissue; do 
+ bedtools intersect -a annotation/gencode.v24.protein.coding.non.redundant.TSS.bed -b data/bed.files/"$filename".bed -u |\
+ cut -f7 |\
+ sort -u > analyses/peaks.analysis/genes.with.peaks."$tissue".ATAC-seq.txt
+done
+
+### Obtain the number of peaks that intersect promoter regions
+
+wc -l analyses/peaks.analysis/genes.with.peaks.sigmoid_colon.ATAC-seq.txt
+wc -l analyses/peaks.analysis/genes.with.peaks.stomach.ATAC-seq.txt
+
+### The number of peaks in sigmoidal colon was 14830 and in stomach was 15029
+
+### 2) the number of peaks that fall outside gene coordinates (whole gene body, not just the promoter regions).
+
+
+
+
+
+
+
+
+
+
+
 
 
 
