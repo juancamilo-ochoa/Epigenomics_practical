@@ -94,10 +94,12 @@ awk 'BEGIN{FS=OFS="\t"}$1!="chrM"{$2=($2-1); print $0}' > annotation/gencode.v24
 
 ### Running the intersection analyses to find the peaks OUTSIDE body coordinates of protein-coding genes
 
-Intersection in sigmoid colon. I used the option  -v because it only reports those entries in A that have no overlap in B.
+### Intersection in sigmoid colon. I used the option  -v because it only reports those entries in A that have no overlap in B.
 
 bedtools intersect -v -b annotation/gencode.v24.protein.coding.gene.body.bed -a data/bed.files/ENCFF287UHP.bed |  cut -f7 |  sort -u > analyses/peaks.analysis/outside.gene.body.sigmoid_colon.ATAC-seq.txt
 wc -l analyses/peaks.analysis/outside.gene.body.sigmoid_colon.ATAC-seq.txt
+
+### Intersection in stomach.
 
 bedtools intersect -v -b annotation/gencode.v24.protein.coding.gene.body.bed -a data/bed.files/ENCFF762IFP.bed |  cut -f7 |  sort -u > analyses/peaks.analysis/outside.gene.body.stomach.ATAC-seq.txt
 wc -l analyses/peaks.analysis/outside.gene.body.stomach.ATAC-seq.txt
