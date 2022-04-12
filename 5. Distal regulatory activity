@@ -61,6 +61,18 @@ done
 
 # Intersection of the both H3K27ac and H3K4me1 peaks in sigmoidal colon
 
+bedtools intersect -u -a data/bed.files/ENCFF724ZOF.bed -b data/bed.files/ENCFF872UHN.bed > analyses/peaks.analysis/peaks.H3K27ac.H3K4me1.sigmoid_colon.txt
+
+# Intersection of the both H3K27ac and H3K4me1 peaks in stomach
+
+bedtools intersect -u -a data/bed.files/ENCFF844XRN.bed -b data/bed.files/ENCFF977LBD.bed > analyses/peaks.analysis/peaks.H3K27ac.H3K4me1.stomach.txt
+
+### Obtain the number of peaks in the intersection
+
+wc -l analyses/peaks.analysis/peaks.H3K27ac.H3K4me1.sigmoid_colon.txt
+wc -l analyses/peaks.analysis/peaks.H3K27ac.H3K4me1.stomach.txt
+
+### A total of 53615 peaks were found in sigmoid colon and 40992 in stomach.
 
 
 
