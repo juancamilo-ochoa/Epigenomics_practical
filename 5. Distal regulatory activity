@@ -1,0 +1,46 @@
+### Study distal regulatory activity
+
+### Task 1: Create a folder regulatory_elements inside epigenomics_uvic. 
+This will be the folder where you store all your subsequent results.
+
+mkdir regulatory_elements
+mkdir data analyses annotation
+
+### Task 2: Distal regulatory regions are usually found to be flanked by both H3K27ac and H3K4me1. 
+### From your starting catalogue of open regions in each tissue, select those that overlap peaks of H3K27ac AND H3K4me1 in the corresponding tissue. 
+### You will get a list of candidate distal regulatory elements for each tissue. How many are they?
+
+### Create folders for the bigBed and bigWig files
+### To obtain the bigBed peaks of both H3K27ac and H3K4me1, I copied the metadata file from the hands on to the regulatory elements folder
+
+mkdir data/bigBed.files data/bigWig.files
+
+### Download bigBed H3K27ac peak calling files
+
+grep -F H3K27ac metadata.tsv |\
+grep -F "bigBed_narrowPeak" |\
+grep -F "pseudoreplicated_peaks" |\
+grep -F "GRCh38" |\
+awk 'BEGIN{FS=OFS="\t"}{print $1, $11, $23}' |\
+sort -k2,2 -k1,1r |\
+sort -k2,2 -u > analyses/bigBed.H3K27ac.peaks.ids.txt
+
+cut -f1 analyses/bigBed.H3K27ac.peaks.ids.txt |\
+while read filename; do
+  wget -P data/bigBed.files "https://www.encodeproject.org/files/$filename/@@download/$filename.bigBed"
+done
+
+### Download bigBed H3K4me1 peak calling files
+
+grep -F H3K4me1 metadata.tsv |\
+grep -F "bigBed_narrowPeak" |\
+grep -F "pseudoreplicated_peaks" |\
+grep -F "GRCh38" |\
+awk 'BEGIN{FS=OFS="\t"}{print $1, $11, $23}' |\
+sort -k2,2 -k1,1r |\
+sort -k2,2 -u > analyses/bigBed.H3K4me1.peaks.ids.txt
+
+cut -f1 analyses/bigBed.H3K27ac.peaks.ids.txt |\
+while read filename; do
+  wget -P data/bigBed.files "https://www.encodeproject.org/files/$filename/@@download/$filename.bigBed"
+done
