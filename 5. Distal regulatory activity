@@ -94,6 +94,48 @@ Have a look at the help page of this script to understand how it works:
 
 python bin/get.distance.py -h
 
+### Testing the python script
 
+python bin/get.distance.py --input regulatory_elements/analyses/gene.starts.tsv --start 980000
+
+### Task 6. For each regulatory element contained in the file regulatory.elements.starts.tsv, retrieve the closest gene and the distance to the closest gene using the python script you created above. 
+### Use the command below as a starting point:
+
+cat regulatory_elements/analyses/regulatory.elements.starts.sigmoid_colon.tsv | while read element start; do 
+   python bin/get.distance.py --input regulatory_elements/analyses/gene.starts.tsv --start $start; 
+done > regulatory_elements/analyses/sigmoid_colon.regulatoryElements.genes.distances.tsv
+
+cat regulatory_elements/analyses/regulatory.elements.starts.stomach.tsv | while read element start; do 
+   python bin/get.distance.py --input regulatory_elements/analyses/gene.starts.tsv --start $start; 
+done > regulatory_elements/analyses/stomach.regulatoryElements.genes.distances.tsv
+
+### Task 7: Use R to compute the mean and the median of the distances stored in regulatoryElements.genes.distances.tsv
+
+### To start R in the terminal
+
+R
+
+# get the working directory
+getwd()
+
+# Set the working directory to the regulatoryElements.genes.distances.tsv location
+setwd("/Users/jochoa/epigenomics_uvic/regulatory_elements/analyses")
+
+### Mean and median of the distance to the gene in sigmoid colon
+mean(read.table("sigmoid_colon.regulatoryElements.genes.distances.tsv",header = FALSE, sep = "\t")[,3])
+[1] 50207.19. ### mean of the distance in sigmoid colon.
+
+median(read.table("sigmoid_colon.regulatoryElements.genes.distances.tsv",header = FALSE, sep = "\t")[,3])
+[1] 17511. ### median of the distance in sigmoid colon.
+
+### Mean and median of the distance to the gene in stomach
+mean(read.table("stomach.regulatoryElements.genes.distances.tsv",header = FALSE, sep = "\t")[,3])
+[1] 36152.68 ### mean of the distance in stomach.
+
+median(read.table("stomach.regulatoryElements.genes.distances.tsv",header = FALSE, sep = "\t")[,3])
+[1] 13049 ### median of the distance in stomach.
+
+To quit r from the terminal
+q()
 
 
